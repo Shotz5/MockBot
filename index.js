@@ -1,4 +1,4 @@
-const { Client, Intents } = require("discord.js")
+const { Client, Intents, MessageEmbed } = require("discord.js")
 const auth = require("./config.json")
 
 const myIntents = new Intents()
@@ -8,10 +8,6 @@ const bot = new Client({ intents: myIntents })
 
 bot.on('ready', () => {
     console.log(`Logged in as ${bot.user.tag}!`)
-})
-
-bot.on("messageCreate", res => {
-    
 })
 
 bot.on("interactionCreate", async interaction => {
@@ -38,7 +34,9 @@ bot.on("interactionCreate", async interaction => {
             if (recentmsg.content == "" || recentmsg == "") {
                 interaction.reply("User hasn't sent any messages recently!")
             } else {
-                interaction.reply(mock(recentmsg.content))
+                let dummyMessage = "<@" + user.id + "> is stupid.\n\n" + mock(recentmsg.content)
+                interaction.reply(dummyMessage)
+                
             }
         })
     }
