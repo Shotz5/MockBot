@@ -5,7 +5,7 @@ const { clientId, guildId, token } = require('./config.json')
 
 const commands = [
     new SlashCommandBuilder()
-        .setName('mock-text')
+        .setName('text-mock')
         .setDescription('Mocks the text passed into it')
         .addStringOption(option => 
             option.setName('text')
@@ -13,12 +13,25 @@ const commands = [
                 .setRequired(true)
         ),
     new SlashCommandBuilder()
-        .setName('mock-user')
+        .setName('user-mock')
         .setDescription('Mocks the user tagged')
         .addUserOption(option =>
             option.setName('user')
                 .setDescription('The user to mock')
                 .setRequired(true)
+        ),
+    new SlashCommandBuilder()
+        .setName('vertical-mock')
+        .setDescription('Returns a string in vertical form')
+        .addStringOption(option =>
+            option.setName('text')
+                .setDescription('The string to vertical-ize')
+                .setRequired(true)
+        )
+        .addUserOption(option =>
+            option.setName('user')
+            .setDescription('Target to a user')
+            .setRequired(false)
         ),
 ].map(command => command.toJSON());
 

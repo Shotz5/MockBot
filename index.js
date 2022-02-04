@@ -15,9 +15,9 @@ bot.on("interactionCreate", async interaction => {
 
     const { commandName } = interaction
 
-    if (commandName == 'mock-text') {
+    if (commandName == 'text-mock') {
         await interaction.reply(mock(interaction.options.getString('text')))
-    } else if (commandName == 'mock-user') {
+    } else if (commandName == 'user-mock') {
         user = interaction.options.getUser('user')
         bot.guilds.cache.get(interaction.guildId).channels.cache.get(interaction.channelId).messages.fetch({
             limit: 50
@@ -34,11 +34,24 @@ bot.on("interactionCreate", async interaction => {
             if (recentmsg.content == "" || recentmsg == "") {
                 interaction.reply("User hasn't sent any messages recently!")
             } else {
-                let dummyMessage = "<@" + user.id + "> is stupid.\n\n" + mock(recentmsg.content)
+                let dummyMessage = "<@" + user.id + ">\n\n" + mock(recentmsg.content)
                 interaction.reply(dummyMessage)
                 
             }
         })
+    } else if (commandName == 'vertical-mock') {
+        dummyMessage = interaction.options.getString('text')
+        targetUser = interaction.options.getUser('user')
+        if (dummyMessage.length > 20) {
+            interaction.reply({ content: "Sorry! Your message is too long, keep it to below 20 characters please.", ephemeral: true })
+        } else {
+            if (targetUser) {
+                message = "<@" + targetUser.id + ">\n\n" + dummyMessage.split('').join('\n').toUpperCase()
+            } else {
+                message = dummyMessage.split('').join('\n').toUpperCase()
+            }
+            interaction.reply(message)
+        }
     }
 })
 
