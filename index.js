@@ -52,6 +52,10 @@ bot.on("interactionCreate", async interaction => {
             }
             interaction.reply(message)
         }
+    } else if (commandName == 'reverse-string') {
+        dummyMessage = interaction.options.getString('text')
+        reversed = dummyMessage.split('').reverse().join('')
+        interaction.reply(reversed)
     }
 })
 
