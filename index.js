@@ -10,6 +10,14 @@ bot.on('ready', () => {
     console.log(`Logged in as ${bot.user.tag}!`)
 })
 
+bot.on("messageCreate", msg => {
+    if (msg.author.id == "123673884099739649") {
+        messagesplit = msg.content.split(" ")
+        console.log(msg.content)
+        msg.reply("Hi \:poop:")
+    }
+})
+
 bot.on("interactionCreate", async interaction => {
     if (!interaction.isCommand()) return;
 
