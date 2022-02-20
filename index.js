@@ -187,12 +187,26 @@ bot.on("interactionCreate", async interaction => {
         reversed = dummyMessage.split('').reverse().join('')
         interaction.reply(reversed)
     } else if (commandName == 'business-mock') {
-        max_int = stupidBusinessBuzzwords.length
-        sentence_length = Math.floor(1 + (Math.random() * 15))
-        sentence = ""
-        for (i = 0; i < sentence_length; i++) {
-            sentence += stupidBusinessBuzzwords[Math.floor(Math.random() * max_int)].toLowerCase() + " "
+        let connectors = ["of", "to", "for", "with", "by", "from", "about", "in", "on", "at", "into", "onto", "off", "out", "over",
+            "under", "up", "down", "around", "through", "that", "this", "these", "those", "it", "its", "a", "an", "the"]
+        let sentence_word_length = Math.floor(Math.random() * 15) + 1
+        let sentence = ""
+        let word_count = 0
+        while(word_count < sentence_word_length) {
+            let word = stupidBusinessBuzzwords[Math.floor(Math.random() * stupidBusinessBuzzwords.length)]
+            if(!word.includes(" ")) {
+                if(Math.random() < 0.5 && word_count > 0) {
+                    sentence += connectors[Math.floor(Math.random() * connectors.length)] + " "
+                }
+            } else {
+                if(Math.random() < 0.5 && word_count > 0) {
+                    sentence += "and "
+                }
+            }
+            sentence += word.toLowerCase() + (Math.random() < 0.2 && sentence_word_length - word_count > 2 ? ", " : " ")
+            word_count++
         }
+        sentence = sentence.charAt(0).toUpperCase() + sentence.slice(1, sentence.length - 1) + "."
         interaction.reply(sentence)
     }
 })
