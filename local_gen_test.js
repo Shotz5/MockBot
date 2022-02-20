@@ -131,6 +131,10 @@ while(word_count < sentence_word_length) {
         if(Math.random() < 0.5 && word_count > 0) {
             sentence += connectors[Math.floor(Math.random() * connectors.length)] + " "
         }
+    } else {
+        if(Math.random() < 0.5 && word_count > 0) {
+            sentence += "and "
+        }
     }
     sentence += word.toLowerCase() + (Math.random() < 0.2 && sentence_word_length - word_count > 2 ? ", " : " ")
     word_count++
