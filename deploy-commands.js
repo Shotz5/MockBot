@@ -41,14 +41,17 @@ const commands = [
                 .setDescription('The text to reverse')
                 .setRequired(true)
         ),
+    new SlashCommandBuilder()
+        .setName('business-mock')
+        .setDescription('Sends a string that mocks stupid business majors.'),
 ].map(command => command.toJSON());
 
 const rest = new REST({ version: '9' }).setToken(token);
 
-// rest.put(Routes.applicationGuildCommands(clientId, guildId), { body: commands })
-//     .then(() => console.log("Successfully registered application commands."))
-//     .catch(console.error)
-
-rest.put(Routes.applicationCommands(clientId), { body: commands })
+rest.put(Routes.applicationGuildCommands(clientId, guildId), { body: commands })
     .then(() => console.log("Successfully registered application commands."))
     .catch(console.error)
+
+// rest.put(Routes.applicationCommands(clientId), { body: commands })
+//     .then(() => console.log("Successfully registered application commands."))
+//     .catch(console.error)
