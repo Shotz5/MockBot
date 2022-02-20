@@ -1,0 +1,9 @@
+{
+    "synonym": {
+        "poop": {
+            "symbol": ":poop:",
+            "text": "poop",
+            "synonyms": ["poop", "shit", "this", "that"]
+        }
+    }
+}
