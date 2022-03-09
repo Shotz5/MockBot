@@ -65,25 +65,14 @@ bot.on("interactionCreate", async interaction => {
         reversed = dummyMessage.split('').reverse().join('')
         interaction.reply(reversed)
     } else if (commandName == 'business-mock') {
-        let sentence_word_length = Math.floor(Math.random() * 15) + 1
-        let sentence = ""
-        let word_count = 0
-        while(word_count < sentence_word_length) {
-            let word = lists.stupidBusinessBuzzwords[Math.floor(Math.random() * lists.stupidBusinessBuzzwords.length)]
-            if(!word.includes(" ")) {
-                if(Math.random() < 0.5 && word_count > 0) {
-                    sentence += lists.connectors[Math.floor(Math.random() * lists.connectors.length)] + " "
-                }
-            } else {
-                if(Math.random() < 0.5 && word_count > 0) {
-                    sentence += "and "
-                }
-            }
-            sentence += word.toLowerCase() + (Math.random() < 0.2 && sentence_word_length - word_count > 2 ? ", " : " ")
-            word_count++
-        }
-        sentence = sentence.charAt(0).toUpperCase() + sentence.slice(1, sentence.length - 1) + "."
+        sentence = generageMockSentence(lists.stupidBusinessBuzzwords)
         interaction.reply(sentence)
+    } else if (commandName == 'haskell-mock') {
+        sentence = generageMockSentence(lists.haskellBuzzWords)
+        interaction.reply(sentence)
+    } else if (commandName == 'reset-commands') {
+        interaction.guild.commands.set([])
+        interaction.reply("Success")
     }
 })
 
@@ -97,6 +86,30 @@ function mock(stringgything) {
         }
     }
     return newString
+}
+
+function generageMockSentence(list) {
+    let sentence_word_length = Math.floor(Math.random() * 15) + 1
+    let sentence = ""
+    let word_count = 0
+
+    while(word_count < sentence_word_length) {
+        let word = list[Math.floor(Math.random() * list.length)]
+        if(!word.includes(" ")) {
+            if(Math.random() < 0.5 && word_count > 0) {
+                sentence += lists.connectors[Math.floor(Math.random() * lists.connectors.length)] + " "
+            }
+        } else {
+            if(Math.random() < 0.5 && word_count > 0) {
+                sentence += "and "
+            }
+        }
+        sentence += word.toLowerCase() + (Math.random() < 0.2 && sentence_word_length - word_count > 2 ? ", " : " ")
+        word_count++
+    }
+
+    sentence = sentence.charAt(0).toUpperCase() + sentence.slice(1, sentence.length - 1) + "."
+    return sentence
 }
 
 bot.login(auth.token)

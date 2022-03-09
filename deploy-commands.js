@@ -44,6 +44,12 @@ const commands = [
     new SlashCommandBuilder()
         .setName('business-mock')
         .setDescription('Sends a string that mocks stupid business majors.'),
+    new SlashCommandBuilder()
+        .setName('haskell-mock')
+        .setDescription('Sends a string that mocks the Haskell "programming" language.'),
+    new SlashCommandBuilder()
+        .setName('reset-commands')
+        .setDescription('Reset server-specific commands.')
 ].map(command => command.toJSON());
 
 const rest = new REST({ version: '9' }).setToken(token);
