@@ -48,6 +48,9 @@ const commands = [
         .setName('haskell-mock')
         .setDescription('Sends a string that mocks the Haskell "programming" language.'),
     new SlashCommandBuilder()
+        .setName('crazy')
+        .setDescription('Crazy? I was crazy once.'),
+    new SlashCommandBuilder()
         .setName('reset-commands')
         .setDescription('Reset server-specific commands.')
 ].map(command => command.toJSON());

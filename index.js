@@ -70,6 +70,8 @@ bot.on("interactionCreate", async interaction => {
     } else if (commandName == 'haskell-mock') {
         sentence = generageMockSentence(lists.haskellBuzzWords)
         interaction.reply(sentence)
+    } else if (commandName == 'crazy') {
+        interaction.reply('Crazy? I was crazy once. They locked me in a room. A rubber room. A rubber room with rats. And rats make me crazy. Crazy? I was crazy once. They locked me in a room. A rubber room. A rubber room with rats. And rats make me crazy. Crazy? I was crazy once. They locked me in a room. A rubber room. A rubber room with rats. And rats make me crazy. Crazy? I was crazy once. They locked me in a room. A rubber room. A rubber room with rats. And rats make me crazy. Crazy? I was crazy once. They locked me in a room. A rubber room. A rubber room with rats. And rats make me crazy. Crazy? I was crazy once. They locked me in a room. A rubber room. A rubber room with rats. And rats make me crazy. Crazy? I was crazy once. They locked me in a room. A rubber room. A rubber room with rats. And rats make me crazy. Crazy? I was crazy once. They locked me in a room. A rubber room. A rubber room with rats. And rats make me crazy.')
     } else if (commandName == 'reset-commands') {
         interaction.guild.commands.set([])
         interaction.reply("Success")
