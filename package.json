@@ -1,14 +1,22 @@
 {
-    "name": "ThisBotIsATestBot",
-    "version": "1.0.0",
-    "description": "My First Discord Bot",
-    "main": "index.js",
-    "author": "Shotz",
-    "dependencies": {
-        "@discordjs/builders": "^0.10.0",
-        "@discordjs/rest": "^0.2.0-canary.0",
-        "@discordjs/voice": "^0.7.5",
-        "discord-api-types": "^0.26.0",
-        "discord.js": "^13.4.0"
-    }
+  "name": "mockbot6000",
+  "version": "2.0.0",
+  "description": "A Discord bot for mocking your friends!",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Shotz5/MockBot6000.git"
+  },
+  "author": "Shotz5",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Shotz5/MockBot6000/issues"
+  },
+  "homepage": "https://github.com/Shotz5/MockBot6000#readme",
+  "dependencies": {
+    "discord.js": "^14.13.0"
+  }
 }
