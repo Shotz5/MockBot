@@ -1,66 +1,40 @@
-const { SlashCommandBuilder } = require('@discordjs/builders')
-const { REST } = require('@discordjs/rest')
-const { Routes } = require('discord-api-types/v9')
-const { clientId, guildId, token } = require('./config.json')
+const { REST, Routes } = require('discord.js');
+const { clientId, guildId, token } = require('./config.json');
+const fs = require('node:fs');
+const path = require('node:path');
 
-const commands = [
-    new SlashCommandBuilder()
-        .setName('text-mock')
-        .setDescription('Mocks the text passed into it')
-        .addStringOption(option => 
-            option.setName('text')
-                .setDescription('The text to mock')
-                .setRequired(true)
-        ),
-    new SlashCommandBuilder()
-        .setName('user-mock')
-        .setDescription('Mocks the user tagged')
-        .addUserOption(option =>
-            option.setName('user')
-                .setDescription('The user to mock')
-                .setRequired(true)
-        ),
-    new SlashCommandBuilder()
-        .setName('vertical-mock')
-        .setDescription('Returns a string in vertical form')
-        .addStringOption(option =>
-            option.setName('text')
-                .setDescription('The string to vertical-ize')
-                .setRequired(true)
-        )
-        .addUserOption(option =>
-            option.setName('user')
-            .setDescription('Target to a user')
-            .setRequired(false)
-        ),
-    new SlashCommandBuilder()
-        .setName('reverse-string')
-        .setDescription('Sends the string back in reverse')
-        .addStringOption(option =>
-            option.setName('text')
-                .setDescription('The text to reverse')
-                .setRequired(true)
-        ),
-    new SlashCommandBuilder()
-        .setName('business-mock')
-        .setDescription('Sends a string that mocks stupid business majors.'),
-    new SlashCommandBuilder()
-        .setName('haskell-mock')
-        .setDescription('Sends a string that mocks the Haskell "programming" language.'),
-    new SlashCommandBuilder()
-        .setName('crazy')
-        .setDescription('Crazy? I was crazy once.'),
-    new SlashCommandBuilder()
-        .setName('reset-commands')
-        .setDescription('Reset server-specific commands.')
-].map(command => command.toJSON());
+const commands = [];
+const commandsPath = path.join(__dirname, 'commands');
+const commandFiles = fs.readdirSync(commandsPath).filter(file => file.endsWith('.js'));
 
-const rest = new REST({ version: '9' }).setToken(token);
+for (const file of commandFiles) {
+    const filePath = path.join(commandsPath, file);
+    const command = require(filePath);
 
-rest.put(Routes.applicationGuildCommands(clientId, guildId), { body: commands })
-    .then(() => console.log("Successfully registered application commands."))
-    .catch(console.error)
+    if ('data' in command && 'execute' in command) {
+        commands.push(command.data.toJSON());
+    } else {
+        console.log(`[WARNING] The command at ${filePath} is missing a required "data" or "execute" property.`);
+    }
+}
 
-// rest.put(Routes.applicationCommands(clientId), { body: commands })
-//     .then(() => console.log("Successfully registered application commands."))
-//     .catch(console.error)
+// Construct and prepare an instance of the REST module
+const rest = new REST().setToken(token);
+
+// and deploy your commands!
+(async () => {
+	try {
+		console.log(`Started refreshing ${commands.length} application (/) commands.`);
+
+		// The put method is used to fully refresh all commands in the guild with the current set
+		const data = await rest.put(
+			Routes.applicationGuildCommands(clientId, guildId),
+			{ body: commands },
+		);
+
+		console.log(`Successfully reloaded ${data.length} application (/) commands.`);
+	} catch (error) {
+		// And of course, make sure you catch and log any errors!
+		console.error(error);
+	}
+})();

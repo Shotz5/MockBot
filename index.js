@@ -1,117 +1,49 @@
-const { Client, Intents, MessageEmbed } = require("discord.js")
-const auth = require("./config.json")
-const lists = require("./object_list.js")
+const { Client, Collection, Events, GatewayIntentBits } = require("discord.js");
+const { token } = require("./config.json");
+const fs = require('node:fs');
+const path = require('node:path');
 
-const myIntents = new Intents()
-myIntents.add(Intents.FLAGS.GUILD_MESSAGES, Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_VOICE_STATES)
+const bot = new Client({ intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages, GatewayIntentBits.MessageContent] })
 
-const bot = new Client({ intents: myIntents })
-
-bot.on('ready', () => {
-    console.log(`Logged in as ${bot.user.tag}!`)
-})
-
-bot.on("messageCreate", msg => {
-    if (msg.author.id == "123673884099739649") {
-        // Business mock test
-        
+// Commands
+bot.commands = new Collection();
+const commandsPath = path.join(__dirname, 'commands');
+const commandFiles = fs.readdirSync(commandsPath).filter(file => file.endsWith('.js'));
+for (const file of commandFiles) {
+    const filePath = path.join(commandsPath, file);
+    const command = require(filePath);
+    if ('data' in command && 'execute' in command) {
+        bot.commands.set(command.data.name, command);
+    } else {
+        console.log(`[WARNING] The command at ${filePath} is missing a required "data" or "execute" property.`);
     }
-})
+}
+
+// Once we're logged into the bot, confirm with command
+bot.once(Events.ClientReady, c => {
+    console.log(`Logged in as ${bot.user.tag}!`)
+});
 
 bot.on("interactionCreate", async interaction => {
-    if (!interaction.isCommand()) return;
+    if (!interaction.isChatInputCommand()) return;
 
-    const { commandName } = interaction
-
-    if (commandName == 'text-mock') {
-        await interaction.reply(mock(interaction.options.getString('text')))
-    } else if (commandName == 'user-mock') {
-        user = interaction.options.getUser('user')
-        bot.guilds.cache.get(interaction.guildId).channels.cache.get(interaction.channelId).messages.fetch({
-            limit: 50
-        }).then(messages => {
-            recentmsg = ""
-            messages.forEach(m => {
-                if (m.author.id == user.id) {
-                    if ((m.createdTimestamp > recentmsg.createdTimestamp && m.content != '') || (recentmsg == "" && m.content != "")) {
-                        recentmsg = m
-                    }
-                }
-            })
-
-            if (recentmsg.content == "" || recentmsg == "") {
-                interaction.reply("User hasn't sent any messages recently!")
-            } else {
-                let dummyMessage = "<@" + user.id + ">\n\n" + mock(recentmsg.content)
-                interaction.reply(dummyMessage)
-                
-            }
-        })
-    } else if (commandName == 'vertical-mock') {
-        dummyMessage = interaction.options.getString('text')
-        targetUser = interaction.options.getUser('user')
-        if (dummyMessage.length > 20) {
-            interaction.reply({ content: "Sorry! Your message is too long, keep it to below 20 characters please.", ephemeral: true })
-        } else {
-            if (targetUser) {
-                message = "<@" + targetUser.id + ">\n\n" + dummyMessage.split('').join('\n').toUpperCase()
-            } else {
-                message = dummyMessage.split('').join('\n').toUpperCase()
-            }
-            interaction.reply(message)
-        }
-    } else if (commandName == 'reverse-string') {
-        dummyMessage = interaction.options.getString('text')
-        reversed = dummyMessage.split('').reverse().join('')
-        interaction.reply(reversed)
-    } else if (commandName == 'business-mock') {
-        sentence = generageMockSentence(lists.stupidBusinessBuzzwords)
-        interaction.reply(sentence)
-    } else if (commandName == 'haskell-mock') {
-        sentence = generageMockSentence(lists.haskellBuzzWords)
-        interaction.reply(sentence)
-    } else if (commandName == 'crazy') {
-        interaction.reply('Crazy? I was crazy once. They locked me in a room. A rubber room. A rubber room with rats. And rats make me crazy. Crazy? I was crazy once. They locked me in a room. A rubber room. A rubber room with rats. And rats make me crazy. Crazy? I was crazy once. They locked me in a room. A rubber room. A rubber room with rats. And rats make me crazy. Crazy? I was crazy once. They locked me in a room. A rubber room. A rubber room with rats. And rats make me crazy. Crazy? I was crazy once. They locked me in a room. A rubber room. A rubber room with rats. And rats make me crazy. Crazy? I was crazy once. They locked me in a room. A rubber room. A rubber room with rats. And rats make me crazy. Crazy? I was crazy once. They locked me in a room. A rubber room. A rubber room with rats. And rats make me crazy. Crazy? I was crazy once. They locked me in a room. A rubber room. A rubber room with rats. And rats make me crazy.')
-    } else if (commandName == 'reset-commands') {
-        interaction.guild.commands.set([])
-        interaction.reply("Success")
-    }
-})
-
-function mock(stringgything) {
-    newString = ""
-    for (i = 0; i < stringgything.length; i++) {
-        if (i % 2 == 0) {
-            newString = newString + stringgything[i].toUpperCase()
-        } else {
-            newString = newString + stringgything[i]
-        }
-    }
-    return newString
-}
-
-function generageMockSentence(list) {
-    let sentence_word_length = Math.floor(Math.random() * 15) + 1
-    let sentence = ""
-    let word_count = 0
-
-    while(word_count < sentence_word_length) {
-        let word = list[Math.floor(Math.random() * list.length)]
-        if(!word.includes(" ")) {
-            if(Math.random() < 0.5 && word_count > 0) {
-                sentence += lists.connectors[Math.floor(Math.random() * lists.connectors.length)] + " "
-            }
-        } else {
-            if(Math.random() < 0.5 && word_count > 0) {
-                sentence += "and "
-            }
-        }
-        sentence += word.toLowerCase() + (Math.random() < 0.2 && sentence_word_length - word_count > 2 ? ", " : " ")
-        word_count++
+    const command = interaction.client.commands.get(interaction.commandName);
+    
+    if (!command) {
+        console.error(`No command matching ${interaction.commandName} was found.`);
+        return;
     }
 
-    sentence = sentence.charAt(0).toUpperCase() + sentence.slice(1, sentence.length - 1) + "."
-    return sentence
-}
+    try {
+        await command.execute(interaction);
+    } catch (error) {
+        console.error(error);
+		if (interaction.replied || interaction.deferred) {
+			await interaction.followUp({ content: 'There was an error while executing this command!', ephemeral: true });
+		} else {
+			await interaction.reply({ content: 'There was an error while executing this command!', ephemeral: true });
+		}
+    }
+});
 
-bot.login(auth.token)
+bot.login(token);
