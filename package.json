@@ -2,9 +2,11 @@
   "name": "mockbot6000",
   "version": "2.0.0",
   "description": "A Discord bot for mocking your friends!",
-  "main": "index.js",
+  "main": "build/index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "npx tsc",
+    "start": "npx tsc && npx ts-node build/index.js",
+    "deploy": "npx tsc && npx ts-node build/deploy-commands.js"
   },
   "repository": {
     "type": "git",
@@ -18,5 +20,10 @@
   "homepage": "https://github.com/Shotz5/MockBot6000#readme",
   "dependencies": {
     "discord.js": "^14.13.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.6.3",
+    "ts-node": "^10.9.1",
+    "typescript": "^5.2.2"
   }
 }

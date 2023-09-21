@@ -1,6 +1,7 @@
-const { SlashCommandBuilder } = require('discord.js');
+import { SlashCommandBuilder, ChatInputCommandInteraction, CacheType } from 'discord.js';
+import { MySlashCommand } from '../utils/classes';
 
-module.exports = {
+export const MockVertical: MySlashCommand = {
     data: new SlashCommandBuilder()
         .setName('mock-vertical')
         .setDescription('Returns a string in vertical form')
@@ -14,11 +15,11 @@ module.exports = {
             .setDescription('Target to a user')
             .setRequired(false)
         ),
-    async execute(interaction) {
+    async execute(interaction: ChatInputCommandInteraction<CacheType>) {
         let message = interaction.options.getString('text', true);
         let user = interaction.options.getUser('user');
 
         let response = message.split('').join('\n');
         await interaction.reply((user ? "<@" + user.id + ">\n\n" : "") + response);
-    },
-};
+    }
+}
