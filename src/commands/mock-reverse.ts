@@ -1,6 +1,7 @@
-const { SlashCommandBuilder } = require('discord.js');
+import { SlashCommandBuilder, ChatInputCommandInteraction, CacheType } from 'discord.js';
+import { MySlashCommand } from '../utils/classes';
 
-module.exports = {
+export const MockReverse: MySlashCommand = {
     data: new SlashCommandBuilder()
         .setName('mock-reverse')
         .setDescription('Sends the string back in reverse')
@@ -9,9 +10,9 @@ module.exports = {
                 .setDescription('The text to reverse')
                 .setRequired(true)
         ),
-    async execute(interaction) {
+    async execute(interaction: ChatInputCommandInteraction<CacheType>) {
         let message = interaction.options.getString('text', true);
         let response = message.split('').reverse().join('');
         await interaction.reply(response);
-    },
-};
+    }
+}

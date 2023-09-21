@@ -1,3 +1,4 @@
+"use strict";
 module.exports = {
     stupidBusinessBuzzwords: [
         "artificial intelligence",
@@ -216,4 +217,4 @@ module.exports = {
         " . ",
         "zip"
     ]
-}
+};
