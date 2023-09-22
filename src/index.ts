@@ -1,5 +1,5 @@
 import { Collection, Events, GatewayIntentBits } from 'discord.js';
-import { MyClient, ISlashCommand } from './utils/classes';
+import { IClient, ISlashCommand } from './utils/types';
 import { token } from './config.json';
 import * as externCommands from './commands/index';
 
@@ -9,7 +9,7 @@ Object.entries(externCommands).forEach(([key, command], index) => {
     commands.set(command.data.name, command);
 });
 
-const bot = new MyClient(
+const bot = new IClient(
     {intents: [
         GatewayIntentBits.GuildMessages,
         GatewayIntentBits.MessageContent,

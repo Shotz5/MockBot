@@ -1,7 +1,6 @@
 import { ChatInputCommandInteraction, CacheType, SlashCommandBuilder } from "discord.js";
 import { AudioPlayerStatus, createAudioResource, getVoiceConnection, VoiceConnectionStatus } from '@discordjs/voice';
-import { ISlashCommand } from "../../utils/classes";
-import { MockResponses } from "../../utils/enums";
+import { ISlashCommand, MockResponses } from "../../utils/types";
 import play from "play-dl";
 
 export const MockAudioPlay: ISlashCommand = {

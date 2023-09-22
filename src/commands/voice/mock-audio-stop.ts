@@ -1,7 +1,6 @@
 import { ChatInputCommandInteraction, CacheType, SlashCommandBuilder } from "discord.js";
 import { getVoiceConnection, VoiceConnectionStatus, AudioPlayerStatus } from '@discordjs/voice';
-import { ISlashCommand } from "../../utils/classes";
-import { MockResponses } from "../../utils/enums";
+import { ISlashCommand, MockResponses } from "../../utils/types";
 
 export const MockAudioStop: ISlashCommand = {
     data: new SlashCommandBuilder()

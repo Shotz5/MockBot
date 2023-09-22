@@ -1,3 +1,5 @@
+import { Client, Collection, ClientOptions, SlashCommandBuilder, ChatInputCommandInteraction, CacheType } from 'discord.js';
+
 export enum MockResponses {
     JoinVC = "Joined voice channel: ",
     LeaveVC = "Destroyed connection to voice channel in guild.",
@@ -11,4 +13,18 @@ export enum MockResponses {
     NotPlaying = "Bot does not currently have any audio playing.",
     NotPaused = "Bot does not currently have any audio paused.",
     SubscriptionError = "There was an error with this bots audio subscription.",
+}
+
+export class IClient extends Client {
+    commands: Collection<string, ISlashCommand>
+
+    constructor(options: ClientOptions, commands: Collection<string, ISlashCommand>) {
+        super(options);
+        this.commands = commands;
+    }
+}
+
+export type ISlashCommand = {
+    data: Omit<SlashCommandBuilder, "addSubcommand" | "addSubcommandGroup">,
+    execute(interaction: ChatInputCommandInteraction<CacheType>): Promise<void>
 }

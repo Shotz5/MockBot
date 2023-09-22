@@ -1,6 +1,6 @@
 import { SlashCommandBuilder, ChatInputCommandInteraction, CacheType } from 'discord.js';
-import * as helpers from '../../utils/functions';
-import { ISlashCommand } from '../../utils/classes';
+import { mock } from '../../utils/mock-factory';
+import { ISlashCommand } from '../../utils/types';
 
 export const MockText: ISlashCommand = {
     data: new SlashCommandBuilder()
@@ -12,7 +12,7 @@ export const MockText: ISlashCommand = {
                 .setRequired(true)
         ),
     async execute(interaction: ChatInputCommandInteraction<CacheType>) {
-        let mockSentence = helpers.mock(interaction.options.getString('text', true));
+        let mockSentence = mock(interaction.options.getString('text', true));
         await interaction.reply(mockSentence);
     }
 }

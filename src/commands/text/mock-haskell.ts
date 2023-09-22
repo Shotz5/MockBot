@@ -1,7 +1,7 @@
 import { SlashCommandBuilder, ChatInputCommandInteraction, CacheType } from 'discord.js';
-import { generateMockSentence } from '../../utils/functions';
+import { generateMockSentence } from '../../utils/mock-factory';
 import { haskellBuzzWords, connectors } from '../../utils/arrays';
-import { ISlashCommand } from '../../utils/classes';
+import { ISlashCommand } from '../../utils/types';
 
 export const MockHaskell: ISlashCommand = {
     data: new SlashCommandBuilder()
