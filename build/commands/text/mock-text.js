@@ -25,7 +25,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.MockText = void 0;
 const discord_js_1 = require("discord.js");
-const helpers = __importStar(require("../utils/functions"));
+const helpers = __importStar(require("../../utils/functions"));
 exports.MockText = {
     data: new discord_js_1.SlashCommandBuilder()
         .setName('mock-text')

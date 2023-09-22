@@ -10,7 +10,11 @@ Object.entries(externCommands).forEach(([key, command], index) => {
 });
 
 const bot = new MyClient(
-    {intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages, GatewayIntentBits.MessageContent]},
+    {intents: [
+        GatewayIntentBits.GuildMessages,
+        GatewayIntentBits.MessageContent,
+        GatewayIntentBits.GuildVoiceStates
+    ]},
     commands,
 );
 
