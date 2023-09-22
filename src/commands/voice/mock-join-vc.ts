@@ -1,7 +1,6 @@
 import { ChatInputCommandInteraction, CacheType, SlashCommandBuilder, ChannelType, VoiceChannel } from "discord.js";
 import { joinVoiceChannel, createAudioPlayer } from '@discordjs/voice';
-import { ISlashCommand } from "../../utils/classes";
-import { MockResponses } from "../../utils/enums";
+import { ISlashCommand, MockResponses } from "../../utils/types";
 
 export const MockJoinVC: ISlashCommand = {
     data: new SlashCommandBuilder()

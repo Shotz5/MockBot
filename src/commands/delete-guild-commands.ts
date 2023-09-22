@@ -1,6 +1,6 @@
 import { REST, Routes, SlashCommandBuilder, ChatInputCommandInteraction, CacheType } from 'discord.js';
 import { token } from '../config.json';
-import { ISlashCommand } from '../utils/classes';
+import { ISlashCommand } from '../utils/types';
 
 const rest = new REST().setToken(token);
 

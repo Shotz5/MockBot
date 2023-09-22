@@ -1,5 +1,5 @@
 import { SlashCommandBuilder, ChatInputCommandInteraction, CacheType } from 'discord.js';
-import { ISlashCommand } from '../../utils/classes';
+import { ISlashCommand } from '../../utils/types';
 
 export const MockVertical: ISlashCommand = {
     data: new SlashCommandBuilder()
