@@ -1,7 +1,7 @@
 import { SlashCommandBuilder, ChatInputCommandInteraction, CacheType } from 'discord.js';
-import { MySlashCommand } from '../../utils/classes';
+import { ISlashCommand } from '../../utils/classes';
 
-export const MockVertical: MySlashCommand = {
+export const MockVertical: ISlashCommand = {
     data: new SlashCommandBuilder()
         .setName('mock-vertical')
         .setDescription('Returns a string in vertical form')

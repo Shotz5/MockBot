@@ -1,7 +1,7 @@
 import { SlashCommandBuilder, ChatInputCommandInteraction, CacheType } from 'discord.js';
-import { MySlashCommand } from '../../utils/classes';
+import { ISlashCommand } from '../../utils/classes';
 
-export const BoolingTime: MySlashCommand = {
+export const BoolingTime: ISlashCommand = {
     data: new SlashCommandBuilder()
         .setName('booling-time')
         .setDescription("Let the lads know it's time for valo."),

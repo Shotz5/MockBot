@@ -1,9 +1,9 @@
 import { ChatInputCommandInteraction, CacheType, SlashCommandBuilder, ChannelType, VoiceChannel } from "discord.js";
 import { joinVoiceChannel, createAudioPlayer } from '@discordjs/voice';
-import { MySlashCommand } from "../../utils/classes";
+import { ISlashCommand } from "../../utils/classes";
 import { MockResponses } from "../../utils/enums";
 
-export const MockJoinVC: MySlashCommand = {
+export const MockJoinVC: ISlashCommand = {
     data: new SlashCommandBuilder()
         .setName('mock-join-vc')
         .setDescription('Tell the bot to join the voice channel')
@@ -24,6 +24,12 @@ export const MockJoinVC: MySlashCommand = {
 
         let player = createAudioPlayer();
         connection.subscribe(player);
+
+        // On error, destroy the connection to preserve memory
+        connection.on("error", (e) => {
+            console.log(e);
+            connection.destroy();
+        });
 
         await interaction.reply(MockResponses.JoinVC + channel.name);
     }

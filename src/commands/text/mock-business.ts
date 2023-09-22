@@ -1,9 +1,9 @@
 import { SlashCommandBuilder, ChatInputCommandInteraction, CacheType } from 'discord.js';
 import { generateMockSentence } from '../../utils/functions';
 import { stupidBusinessBuzzwords, connectors } from '../../utils/arrays';
-import { MySlashCommand } from '../../utils/classes';
+import { ISlashCommand } from '../../utils/classes';
 
-export const MockBusiness: MySlashCommand = {
+export const MockBusiness: ISlashCommand = {
     data: new SlashCommandBuilder()
         .setName('mock-business')
         .setDescription('Sends a string that mocks the dum business majors.'),

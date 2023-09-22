@@ -1,7 +1,7 @@
 import { SlashCommandBuilder, ChatInputCommandInteraction, CacheType } from 'discord.js';
-import { MySlashCommand } from '../../utils/classes';
+import { ISlashCommand } from '../../utils/classes';
 
-export const MockReverse: MySlashCommand = {
+export const MockReverse: ISlashCommand = {
     data: new SlashCommandBuilder()
         .setName('mock-reverse')
         .setDescription('Sends the string back in reverse')

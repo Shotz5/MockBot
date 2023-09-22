@@ -1,10 +1,10 @@
 import { ChatInputCommandInteraction, CacheType, SlashCommandBuilder } from "discord.js";
 import { AudioPlayerStatus, createAudioResource, getVoiceConnection, VoiceConnectionStatus } from '@discordjs/voice';
-import { MySlashCommand } from "../../utils/classes";
+import { ISlashCommand } from "../../utils/classes";
 import { MockResponses } from "../../utils/enums";
 import play from "play-dl";
 
-export const MockAudioPlay: MySlashCommand = {
+export const MockAudioPlay: ISlashCommand = {
     data: new SlashCommandBuilder()
         .setName('mock-audio-play')
         .setDescription('Play audio in a voice channel from YouTube')

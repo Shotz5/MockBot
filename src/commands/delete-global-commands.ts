@@ -1,10 +1,10 @@
 import { REST, Routes, SlashCommandBuilder, ChatInputCommandInteraction, CacheType } from 'discord.js';
-import { token } from '../config/config.json';
-import { MySlashCommand } from '../utils/classes';
+import { token } from '../config.json';
+import { ISlashCommand } from '../utils/classes';
 
 const rest = new REST().setToken(token);
 
-export const DeleteGlobalCommands: MySlashCommand = {
+export const DeleteGlobalCommands: ISlashCommand = {
     data: new SlashCommandBuilder()
         .setName('delete-global-commands')
         .setDescription('Delete all global application commands.'),

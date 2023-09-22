@@ -1,5 +1,5 @@
 import { REST, Routes, RESTPostAPIChatInputApplicationCommandsJSONBody } from 'discord.js';
-import { clientId, guildId, token } from './config/config.json';
+import { clientId, guildId, token } from './config.json';
 import * as externCommands from './commands/index';
 
 const commands: RESTPostAPIChatInputApplicationCommandsJSONBody[] = [];

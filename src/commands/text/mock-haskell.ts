@@ -1,9 +1,9 @@
 import { SlashCommandBuilder, ChatInputCommandInteraction, CacheType } from 'discord.js';
 import { generateMockSentence } from '../../utils/functions';
 import { haskellBuzzWords, connectors } from '../../utils/arrays';
-import { MySlashCommand } from '../../utils/classes';
+import { ISlashCommand } from '../../utils/classes';
 
-export const MockHaskell: MySlashCommand = {
+export const MockHaskell: ISlashCommand = {
     data: new SlashCommandBuilder()
         .setName('mock-haskell')
         .setDescription('Sends a string that mocks the Haskell "programming" language.'),

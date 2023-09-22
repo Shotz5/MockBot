@@ -1,9 +1,9 @@
 import { ChatInputCommandInteraction, CacheType, SlashCommandBuilder } from "discord.js";
 import { getVoiceConnection, VoiceConnectionStatus, AudioPlayerStatus } from '@discordjs/voice';
-import { MySlashCommand } from "../../utils/classes";
+import { ISlashCommand } from "../../utils/classes";
 import { MockResponses } from "../../utils/enums";
 
-export const MockAudioPause: MySlashCommand = {
+export const MockAudioPause: ISlashCommand = {
     data: new SlashCommandBuilder()
         .setName('mock-audio-pause')
         .setDescription('Pause the bots audio in this guild.'),
