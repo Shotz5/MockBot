@@ -1,9 +1,9 @@
-import { ChatInputCommandInteraction, CacheType, SlashCommandBuilder, ChannelType, VoiceChannel } from "discord.js";
+import { ChatInputCommandInteraction, CacheType, SlashCommandBuilder, } from "discord.js";
 import { getVoiceConnection } from '@discordjs/voice';
-import { MySlashCommand } from "../../utils/classes";
+import { ISlashCommand } from "../../utils/classes";
 import { MockResponses } from "../../utils/enums";
 
-export const MockLeaveVC: MySlashCommand = {
+export const MockLeaveVC: ISlashCommand = {
     data: new SlashCommandBuilder()
         .setName('mock-leave-vc')
         .setDescription('Tell the bot to leave the voice channel'),

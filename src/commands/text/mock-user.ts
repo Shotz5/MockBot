@@ -1,8 +1,8 @@
 import { SlashCommandBuilder, ChatInputCommandInteraction, CacheType, Message } from 'discord.js';
 import { mock } from '../../utils/functions';
-import { MySlashCommand } from '../../utils/classes';
+import { ISlashCommand } from '../../utils/classes';
 
-export const MockUser: MySlashCommand = {
+export const MockUser: ISlashCommand = {
     data: new SlashCommandBuilder()
         .setName('mock-user')
         .setDescription('Mocks the user tagged')

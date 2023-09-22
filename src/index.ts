@@ -1,9 +1,9 @@
 import { Collection, Events, GatewayIntentBits } from 'discord.js';
-import { MyClient, MySlashCommand } from './utils/classes';
-import { token } from './config/config.json';
+import { MyClient, ISlashCommand } from './utils/classes';
+import { token } from './config.json';
 import * as externCommands from './commands/index';
 
-const commands = new Collection<string, MySlashCommand>();
+const commands = new Collection<string, ISlashCommand>();
 // Import commands from files
 Object.entries(externCommands).forEach(([key, command], index) => {
     commands.set(command.data.name, command);
