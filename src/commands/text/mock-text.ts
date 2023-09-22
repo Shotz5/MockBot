@@ -1,6 +1,6 @@
 import { SlashCommandBuilder, ChatInputCommandInteraction, CacheType } from 'discord.js';
-import * as helpers from '../utils/functions';
-import { MySlashCommand } from '../utils/classes';
+import * as helpers from '../../utils/functions';
+import { MySlashCommand } from '../../utils/classes';
 
 export const MockText: MySlashCommand = {
     data: new SlashCommandBuilder()

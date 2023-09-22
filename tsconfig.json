@@ -1,13 +1,17 @@
 {
   "compilerOptions": {
+    // Output
     "target": "ES2020",
     "module": "CommonJS",
     "rootDir": "./src",
     "outDir": "./build",
+
+    // Compile settings
     "strict": true,
     "noImplicitAny": true,
     "moduleResolution": "node",
     "resolveJsonModule": true,
+    "esModuleInterop": true,
   },
   "include": ["src"],
   "exclude": ["node_modules", "build"]
