@@ -1,0 +1,18 @@
+export enum MockResponses {
+    JoinVC = "Joined voice channel: ",
+    LeaveVC = "Destroyed connection to voice channel in guild.",
+    GuildNotFound = "Could not find guild the command was ran from.",
+    UrlInvalid = "Youtube URL provided is invalid.",
+    NotConnected = "Not connected to a voice channel, run /mock-join-vc <channel> first.",
+    Playing = "Playing...",
+    PlayError = "An error occured attempting to play media: ",
+    UnpauseError = "An error occured while trying to unpause...",
+    Stopped = "Stopped playing.",
+    StopError = "An error occured while trying to stop...",
+    Paused = "Paused...",
+    PauseError = "An error occured while attempting to pause...",
+    AlreadyPlaying = "Already playing audio, wait for it to finish!",
+    NotPlaying = "Bot does not currently have any audio playing.",
+    NotPaused = "Bot does not currently have any audio paused.",
+    SubscriptionError = "There was an error with this bots audio subscription.",
+}

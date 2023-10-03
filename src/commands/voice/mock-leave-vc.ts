@@ -1,25 +1,31 @@
 import { ChatInputCommandInteraction, CacheType, SlashCommandBuilder, } from "discord.js";
 import { getVoiceConnection } from '@discordjs/voice';
-import { ISlashCommand, MockResponses } from "../../utils/types";
+import { IEmbedInfoBuilder, ISlashCommand } from "../../utils/types";
+import { MockResponses } from "../../utils/translations";
 
 export const MockLeaveVC: ISlashCommand = {
     data: new SlashCommandBuilder()
         .setName('mock-leave-vc')
         .setDescription('Tell the bot to leave the voice channel'),
     async execute(interaction: ChatInputCommandInteraction<CacheType>) {
+        const embed = new IEmbedInfoBuilder();
+
         if (!interaction.guildId) {
-            await interaction.reply(MockResponses.GuildNotFound);
+            embed.title = MockResponses.GuildNotFound
+            await interaction.reply({ embeds: [embed.toEmbedBuilder()] });
             return;
         }
 
         let connection = getVoiceConnection(interaction.guildId);
         if (!connection) {
-            await interaction.reply(MockResponses.NotConnected);
+            embed.title = MockResponses.NotConnected;
+            await interaction.reply({ embeds: [embed.toEmbedBuilder()] });
             return;
         }
 
         connection.destroy();
 
-        await interaction.reply(MockResponses.LeaveVC);
+        embed.title = MockResponses.LeaveVC;
+        await interaction.reply({ embeds: [embed.toEmbedBuilder()] });
     }
 }

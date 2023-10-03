@@ -1,6 +1,8 @@
 import { ChatInputCommandInteraction, CacheType, SlashCommandBuilder } from "discord.js";
 import { AudioPlayerStatus, createAudioResource, getVoiceConnection, VoiceConnectionStatus } from '@discordjs/voice';
-import { ISlashCommand, MockResponses } from "../../utils/types";
+import { IEmbedInfoBuilder, IEmbedPlayingBuilder, ISlashCommand } from "../../utils/types";
+import { MockResponses } from "../../utils/translations";
+import { clipStringToLength } from "../../utils/strings";
 import play from "play-dl";
 
 export const MockAudioPlay: ISlashCommand = {
@@ -13,42 +15,69 @@ export const MockAudioPlay: ISlashCommand = {
                 .setRequired(true)
         ),
     async execute(interaction: ChatInputCommandInteraction<CacheType>) {
+        let embed = new IEmbedInfoBuilder();
         let url = interaction.options.getString('url', true);
 
         if (!interaction.guildId) {
-            await interaction.reply(MockResponses.GuildNotFound);
+            embed.title = MockResponses.GuildNotFound;
+            await interaction.reply({ embeds: [embed.toEmbedBuilder()] });
             return;
         }
 
         let validateUrl = await play.validate(url);
-        if (!validateUrl || validateUrl == "search") {
-            await interaction.reply(MockResponses.UrlInvalid);
+        if (!validateUrl || validateUrl != "yt_video") {
+            embed.title = MockResponses.UrlInvalid;
+            await interaction.reply({ embeds: [embed.toEmbedBuilder()] });
             return;
         }
 
         let connection = getVoiceConnection(interaction.guildId);
         if (!connection || connection.state.status != VoiceConnectionStatus.Ready) {
-            await interaction.reply(MockResponses.NotConnected);
+            embed.title = MockResponses.NotConnected;
+            await interaction.reply({ embeds: [embed.toEmbedBuilder()] });
             return;
         }
 
         if (!connection.state.subscription) {
-            await interaction.reply(MockResponses.SubscriptionError);
+            embed.title = MockResponses.SubscriptionError;
+            await interaction.reply({ embeds: [embed.toEmbedBuilder()] });
             return;
         }
 
         if (connection.state.subscription.player.state.status != AudioPlayerStatus.Idle) {
-            await interaction.reply(MockResponses.AlreadyPlaying);
+            embed.title = MockResponses.AlreadyPlaying;
+            await interaction.reply({ embeds: [embed.toEmbedBuilder()] });
             return;
         }
 
-        let stream = await play.stream(url, {
-            discordPlayerCompatibility: true,
-        });
+        try {
+            // Fails if age restricted
+            let stream = await play.stream(url, {
+                discordPlayerCompatibility: true,
+            });
 
-        let resource = createAudioResource(stream.stream);
-        connection.state.subscription.player.play(resource);
+            let videoInfo = await play.video_info(url, { htmldata: false });
 
-        await interaction.reply(MockResponses.Playing);
+            let playEmbed = new IEmbedPlayingBuilder({
+                title: videoInfo.video_details.title,
+                url: url,
+                author: videoInfo.video_details.channel,
+                description: clipStringToLength(videoInfo.video_details.description, 150),
+                image: videoInfo.video_details.thumbnails[3].url,
+            });
+
+            let resource = createAudioResource(stream.stream);
+            connection.state.subscription.player.play(resource);
+
+            await interaction.reply({ embeds: [playEmbed.toEmbedBuilder()] });
+
+        } catch (e: any) {
+
+            if (e instanceof Error) {
+                embed.title = MockResponses.PlayError + "\n" + e.message;
+                await interaction.reply({ embeds: [embed.toEmbedBuilder()] });
+            }
+
+        }
     }
 }

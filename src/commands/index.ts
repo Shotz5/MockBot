@@ -13,7 +13,7 @@ import { MockLeaveVC } from './voice/mock-leave-vc';
 import { MockAudioPlay } from './voice/mock-audio-play';
 import { MockAudioPause } from './voice/mock-audio-pause';
 import { MockAudioStop } from './voice/mock-audio-stop';
-import { MockAudioUnPause } from './voice/mock-audio-unpause';
+import { MockAudioUnpause } from './voice/mock-audio-unpause';
 
 export default {
     DeleteGlobalCommands,
@@ -31,5 +31,5 @@ export default {
     MockAudioPlay,
     MockAudioPause,
     MockAudioStop,
-    MockAudioUnPause,
+    MockAudioUnpause,
 }

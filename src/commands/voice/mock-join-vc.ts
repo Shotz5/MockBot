@@ -1,6 +1,7 @@
 import { ChatInputCommandInteraction, CacheType, SlashCommandBuilder, ChannelType, VoiceChannel } from "discord.js";
 import { joinVoiceChannel, createAudioPlayer } from '@discordjs/voice';
-import { ISlashCommand, MockResponses } from "../../utils/types";
+import { IEmbedInfoBuilder, ISlashCommand } from "../../utils/types";
+import { MockResponses } from "../../utils/translations";
 
 export const MockJoinVC: ISlashCommand = {
     data: new SlashCommandBuilder()
@@ -30,6 +31,10 @@ export const MockJoinVC: ISlashCommand = {
             connection.destroy();
         });
 
-        await interaction.reply(MockResponses.JoinVC + channel.name);
+        let embed = new IEmbedInfoBuilder({
+            title: MockResponses.JoinVC + channel.name,
+        });
+
+        await interaction.reply({ embeds: [embed.toEmbedBuilder()] });
     }
 }
