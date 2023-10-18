@@ -1,6 +1,6 @@
 import { ChatInputCommandInteraction, CacheType, SlashCommandBuilder } from "discord.js";
 import { AudioPlayerStatus, createAudioResource, getVoiceConnection, VoiceConnectionStatus } from '@discordjs/voice';
-import { IEmbedInfoBuilder, IEmbedPlayingBuilder, ISlashCommand } from "../../utils/types";
+import { ResourceMetadata, ISlashCommand, IAudioPlayer, InfoEmbedBuilder } from "../../utils/types";
 import { MockResponses } from "../../utils/translations";
 import { clipStringToLength } from "../../utils/strings";
 import play from "play-dl";
@@ -15,38 +15,39 @@ export const MockAudioPlay: ISlashCommand = {
                 .setRequired(true)
         ),
     async execute(interaction: ChatInputCommandInteraction<CacheType>) {
-        let embed = new IEmbedInfoBuilder();
+        // This takes > 3 seconds to run sometimes, so a defer must be used
+        await interaction.deferReply({ ephemeral: true });
+
+        let embed = new InfoEmbedBuilder();
         let url = interaction.options.getString('url', true);
 
+        // If command was not executed in a guild (how the fuck they could idk)
         if (!interaction.guildId) {
-            embed.title = MockResponses.GuildNotFound;
-            await interaction.reply({ embeds: [embed.toEmbedBuilder()] });
+            embed.setTitle(MockResponses.GuildNotFound);
+            await interaction.editReply({ embeds: [embed.toEmbedBuilder()] });
             return;
         }
 
+        // If the url is not a youtube URL as per play-dls validation
         let validateUrl = await play.validate(url);
         if (!validateUrl || validateUrl != "yt_video") {
-            embed.title = MockResponses.UrlInvalid;
-            await interaction.reply({ embeds: [embed.toEmbedBuilder()] });
+            embed.setTitle(MockResponses.UrlInvalid);
+            await interaction.editReply({ embeds: [embed.toEmbedBuilder()] });
             return;
         }
 
+        // If the connection is not in a ready state or doesn't exist
         let connection = getVoiceConnection(interaction.guildId);
         if (!connection || connection.state.status != VoiceConnectionStatus.Ready) {
-            embed.title = MockResponses.NotConnected;
-            await interaction.reply({ embeds: [embed.toEmbedBuilder()] });
+            embed.setTitle(MockResponses.NotConnected);
+            await interaction.editReply({ embeds: [embed.toEmbedBuilder()] });
             return;
         }
 
+        // If the connection is not subscribed to an audio player
         if (!connection.state.subscription) {
-            embed.title = MockResponses.SubscriptionError;
-            await interaction.reply({ embeds: [embed.toEmbedBuilder()] });
-            return;
-        }
-
-        if (connection.state.subscription.player.state.status != AudioPlayerStatus.Idle) {
-            embed.title = MockResponses.AlreadyPlaying;
-            await interaction.reply({ embeds: [embed.toEmbedBuilder()] });
+            embed.setTitle(MockResponses.SubscriptionError);
+            await interaction.editReply({ embeds: [embed.toEmbedBuilder()] });
             return;
         }
 
@@ -58,7 +59,7 @@ export const MockAudioPlay: ISlashCommand = {
 
             let videoInfo = await play.video_info(url, { htmldata: false });
 
-            let playEmbed = new IEmbedPlayingBuilder({
+            let metaData = new ResourceMetadata({
                 title: videoInfo.video_details.title,
                 url: url,
                 author: videoInfo.video_details.channel,
@@ -67,15 +68,34 @@ export const MockAudioPlay: ISlashCommand = {
             });
 
             let resource = createAudioResource(stream.stream);
-            connection.state.subscription.player.play(resource);
+            // Upcast AudioPlayer back to IAudioPlayer
+            let player = connection.state.subscription.player as IAudioPlayer;
+            // Queue item user wanted to play
+            let queueEmbed = player.enqueue(resource, metaData);
 
-            await interaction.reply({ embeds: [playEmbed.toEmbedBuilder()] });
+            // If already playing, only queue, stop here
+            if (player.state.status != AudioPlayerStatus.Idle) {
+                await interaction.editReply({ content: "Added the following item to the queue", embeds: [queueEmbed.toEmbedBuilder()] });
+                return;
+            }
+
+            // Else play as well
+            let playerEmbed = player.play();
+
+            // If play failed because there's nothing in the queue (should never happen...)
+            if (!playerEmbed) {
+                embed.setTitle(MockResponses.PlayError);
+                await interaction.editReply({ embeds: [embed.toEmbedBuilder()] });
+                return;
+            }
+
+            await interaction.editReply({ embeds: [playerEmbed.toEmbedBuilder()] });
 
         } catch (e: any) {
 
             if (e instanceof Error) {
-                embed.title = MockResponses.PlayError + "\n" + e.message;
-                await interaction.reply({ embeds: [embed.toEmbedBuilder()] });
+                embed.setTitle(MockResponses.PlayError + "\n" + e.message);
+                await interaction.editReply({ embeds: [embed.toEmbedBuilder()] });
             }
 
         }

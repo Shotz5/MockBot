@@ -1,6 +1,6 @@
 import { ChatInputCommandInteraction, CacheType, SlashCommandBuilder, ChannelType, VoiceChannel } from "discord.js";
-import { joinVoiceChannel, createAudioPlayer } from '@discordjs/voice';
-import { IEmbedInfoBuilder, ISlashCommand } from "../../utils/types";
+import { joinVoiceChannel } from '@discordjs/voice';
+import { InfoEmbedBuilder, ISlashCommand, createAudioPlayer, InfoMetadata } from "../../utils/types";
 import { MockResponses } from "../../utils/translations";
 
 export const MockJoinVC: ISlashCommand = {
@@ -23,6 +23,8 @@ export const MockJoinVC: ISlashCommand = {
         });
 
         let player = createAudioPlayer();
+        // This downcasts the IAudioPlayer to AudioPlayer
+        // It must be casted back to IAudioPlayer to have the queue
         connection.subscribe(player);
 
         // On error, destroy the connection to preserve memory
@@ -31,10 +33,8 @@ export const MockJoinVC: ISlashCommand = {
             connection.destroy();
         });
 
-        let embed = new IEmbedInfoBuilder({
-            title: MockResponses.JoinVC + channel.name,
-        });
+        let embed = new InfoEmbedBuilder(MockResponses.JoinVC + channel.name);
 
-        await interaction.reply({ embeds: [embed.toEmbedBuilder()] });
+        await interaction.reply({ embeds: [embed.toEmbedBuilder()], ephemeral: true });
     }
 }

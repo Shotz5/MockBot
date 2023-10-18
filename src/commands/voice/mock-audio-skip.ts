@@ -1,12 +1,12 @@
 import { ChatInputCommandInteraction, CacheType, SlashCommandBuilder } from "discord.js";
 import { getVoiceConnection, VoiceConnectionStatus, AudioPlayerStatus } from '@discordjs/voice';
-import { IAudioPlayer, InfoEmbedBuilder, ISlashCommand } from "../../utils/types";
+import { InfoEmbedBuilder, ISlashCommand, IAudioPlayer } from "../../utils/types";
 import { MockResponses } from "../../utils/translations";
 
-export const MockAudioStop: ISlashCommand = {
+export const MockAudioSkip: ISlashCommand = {
     data: new SlashCommandBuilder()
-        .setName('mock-audio-stop')
-        .setDescription('Stop the bot from playing audio in this guild, will clear the queue'),
+        .setName('mock-audio-skip')
+        .setDescription('Skip the currently playing audio in this guild.'),
     async execute(interaction: ChatInputCommandInteraction<CacheType>) {
         const embed = new InfoEmbedBuilder();
 
@@ -29,20 +29,20 @@ export const MockAudioStop: ISlashCommand = {
             return;
         }
 
-        if (connection.state.subscription.player.state.status == AudioPlayerStatus.Idle) {
+        if (connection.state.subscription.player.state.status != AudioPlayerStatus.Playing) {
             embed.setTitle(MockResponses.NotPlaying);
             await interaction.reply({ embeds: [embed.toEmbedBuilder()] });
             return;
         }
 
         let player = connection.state.subscription.player as IAudioPlayer;
-        if (!player.stop()) {
-            embed.setTitle(MockResponses.StopError);
+        let playerEmbed = player.skip();
+        if (!playerEmbed) {
+            embed.setTitle(MockResponses.QueueEmpty);
             await interaction.reply({ embeds: [embed.toEmbedBuilder()] });
             return;
         }
 
-        embed.setTitle(MockResponses.Stopped);
-        await interaction.reply({ embeds: [embed.toEmbedBuilder()] });
+        await interaction.reply({ embeds: [playerEmbed.toEmbedBuilder()] });
     }
 }
