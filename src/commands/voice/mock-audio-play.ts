@@ -16,7 +16,7 @@ export const MockAudioPlay: ISlashCommand = {
         ),
     async execute(interaction: ChatInputCommandInteraction<CacheType>) {
         // This takes > 3 seconds to run sometimes, so a defer must be used
-        await interaction.deferReply({ ephemeral: true });
+        await interaction.deferReply();
 
         let embed = new InfoEmbedBuilder();
         let url = interaction.options.getString('url', true);

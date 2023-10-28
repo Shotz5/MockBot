@@ -26,6 +26,6 @@ export const MockLeaveVC: ISlashCommand = {
         connection.destroy();
 
         embed.setTitle(MockResponses.LeaveVC);
-        await interaction.reply({ embeds: [embed.toEmbedBuilder()], ephemeral: true });
+        await interaction.reply({ embeds: [embed.toEmbedBuilder()] });
     }
 }

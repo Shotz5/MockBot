@@ -11,7 +11,7 @@ export const DeleteGuildCommands: ISlashCommand = {
     async execute(interaction: ChatInputCommandInteraction<CacheType>) {
         // If you're not Shotz, you can't do it, sorry :(
         if (interaction.user.id != '123673884099739649' || !interaction.guildId) {
-            await interaction.reply({ content: 'Cannot execute this command if you are not Shotz', ephemeral: true });
+            await interaction.reply({ content: 'Cannot execute this command if you are not Shotz' });
         } else {
             await rest.put(Routes.applicationGuildCommands(interaction.applicationId, interaction.guildId), { body: [] })
                 .then(() => {
@@ -20,7 +20,7 @@ export const DeleteGuildCommands: ISlashCommand = {
                         return;
                     }
                     console.log('Deleted all guild commands for ' + interaction.guild.name);
-                    interaction.reply({ content: 'Deleted all guild commands for ' + interaction.guild.name, ephemeral: true });
+                    interaction.reply({ content: 'Deleted all guild commands for ' + interaction.guild.name });
                 });
         }
     }

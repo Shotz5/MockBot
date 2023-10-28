@@ -35,6 +35,6 @@ export const MockJoinVC: ISlashCommand = {
 
         let embed = new InfoEmbedBuilder(MockResponses.JoinVC + channel.name);
 
-        await interaction.reply({ embeds: [embed.toEmbedBuilder()], ephemeral: true });
+        await interaction.reply({ embeds: [embed.toEmbedBuilder()] });
     }
 }
